@@ -146,8 +146,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     };
 
     try {
-      await emailjs.send('service_89loxo2', 'template_REPLACE1', params); // your notification template
-      await emailjs.send('service_89loxo2', 'template_REPLACE2', params); // auto-reply template
+      await emailjs.send('service_89loxo2', 'template_fzch057', params); // your notification template
+      await emailjs.send('service_89loxo2', 'template_2h6fh9k', params); // auto-reply template
       showToast(true, "Message sent! We'll get back to you within 24 hours.");
       form.reset();
     } catch (err) {
@@ -158,3 +158,4 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
       submitLabel.textContent = 'Send Request';
     }
   });
+
