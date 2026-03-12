@@ -100,7 +100,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 // ── EMAILJS ──
 document.addEventListener('DOMContentLoaded', function () {
 
-  emailjs.init('5joDIg039QKRPbSK');
+  emailjs.init('-5joDIg039QKRPbSK');
 
   const form = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
@@ -179,4 +179,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
 
