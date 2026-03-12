@@ -1,4 +1,3 @@
-
 // ── SERVICES DATA ──
 const services = [
   { num: '01', title: 'Strategic marketing planning', icon: '<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>', desc: 'A comprehensive strategy tailored to your business model, competitive landscape, and growth targets. We build marketing roadmaps that create clarity, reduce waste, and align your team around a unified direction.' },
@@ -15,9 +14,6 @@ let activeIdx = 0;
 
 function buildServices() {
   const nav = document.getElementById('servicesNav');
-  const panel = document.getElementById('servicesPanel');
-
-  // Nav
   services.forEach((s, i) => {
     const btn = document.createElement('button');
     btn.className = 'service-btn' + (i === 0 ? ' active' : '');
@@ -25,11 +21,8 @@ function buildServices() {
     btn.onclick = () => setService(i);
     nav.appendChild(btn);
   });
-
-  // Indicator
   const ind = document.getElementById('navIndicator');
   nav.appendChild(ind);
-
   renderPanel(0);
   setTimeout(() => updateIndicator(0), 100);
 }
@@ -42,9 +35,6 @@ function updateIndicator(idx) {
   const btnRect = btns[idx].getBoundingClientRect();
   const navRect = nav.getBoundingClientRect();
   ind.style.top = (btnRect.top - navRect.top) + 'px';
-  ind.style.height = btnRect.height + 'px';
-  ind.style.marginTop = '8px';
-  ind.style.marginBottom = '8px';
   ind.style.height = (btnRect.height - 16) + 'px';
 }
 
@@ -106,56 +96,80 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-  emailjs.init('5joDIg039QKRPbSK');
+// ── EMAILJS ──
+emailjs.init('5joDIg039QKRPbSK');
 
-  const form = document.getElementById('contactForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const submitLabel = document.getElementById('submitLabel');
-  const toast = document.getElementById('formToast');
+const form = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+const submitLabel = document.getElementById('submitLabel');
+const toast = document.getElementById('formToast');
 
-  function showToast(success, msg) {
-    toast.style.display = 'flex';
-    toast.style.alignItems = 'center';
-    toast.style.gap = '10px';
-    toast.style.padding = '14px 18px';
-    toast.style.borderRadius = '10px';
-    toast.style.marginBottom = '20px';
-    toast.style.fontSize = '14px';
-    toast.style.fontWeight = '500';
-    toast.style.background = success ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
-    toast.style.border = success ? '1px solid rgba(34,197,94,0.3)' : '1px solid rgba(239,68,68,0.3)';
-    toast.style.color = success ? '#4ade80' : '#f87171';
-    toast.innerHTML = (success
-      ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>'
-      : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'
-    ) + `<span>${msg}</span>`;
-    setTimeout(() => { toast.style.display = 'none'; }, 6000);
+function showToast(success, msg) {
+  toast.style.display = 'flex';
+  toast.style.alignItems = 'center';
+  toast.style.gap = '10px';
+  toast.style.padding = '14px 18px';
+  toast.style.borderRadius = '10px';
+  toast.style.marginBottom = '20px';
+  toast.style.fontSize = '14px';
+  toast.style.fontWeight = '500';
+  toast.style.background = success ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
+  toast.style.border = success ? '1px solid rgba(34,197,94,0.3)' : '1px solid rgba(239,68,68,0.3)';
+  toast.style.color = success ? '#4ade80' : '#f87171';
+  toast.innerHTML = (success
+    ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>'
+    : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'
+  ) + `<span>${msg}</span>`;
+  setTimeout(() => { toast.style.display = 'none'; }, 6000);
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitLabel.textContent = 'Sending...';
+
+  const params = {
+    from_name:  document.getElementById('f_name').value,
+    from_email: document.getElementById('f_email').value,
+    message:    document.getElementById('f_message').value,
+    reply_to:   document.getElementById('f_email').value,
+  };
+
+  try {
+    await emailjs.send('service_89loxo2', 'template_fzch057', params);
+    await emailjs.send('service_89loxo2', 'template_2h6fh9k', params);
+
+    // ── Show thank you message ──
+    document.getElementById('contactForm').innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+                  text-align:center;padding:48px 24px;gap:20px;">
+        <div style="width:64px;height:64px;border-radius:50%;
+                    background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);
+                    display:flex;align-items:center;justify-content:center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+               fill="none" stroke="#4ade80" stroke-width="2">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </div>
+        <h3 style="font-size:22px;font-weight:700;color:#fff;">Message Sent!</h3>
+        <p style="color:#9ca3af;font-size:15px;line-height:1.7;max-width:300px;">
+          Thanks for reaching out! We'll get back to you within
+          <strong style="color:#f97316;">24 hours</strong>.
+        </p>
+        <button onclick="location.reload()" style="margin-top:8px;padding:10px 24px;
+                border-radius:8px;background:transparent;
+                border:1px solid rgba(255,255,255,0.1);color:#9ca3af;
+                font-size:13px;cursor:pointer;transition:all 0.2s;"
+          onmouseover="this.style.borderColor='#f97316';this.style.color='#f97316'"
+          onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='#9ca3af'">
+          Send another message
+        </button>
+      </div>`;
+
+  } catch (err) {
+    console.error(err);
+    showToast(false, 'Something went wrong. Please try again.');
+    submitBtn.disabled = false;
+    submitLabel.textContent = 'Send Request';
   }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    submitBtn.disabled = true;
-    submitLabel.textContent = 'Sending...';
-
-    const params = {
-      from_name:  document.getElementById('f_name').value,
-      from_email: document.getElementById('f_email').value,
-      website:    document.getElementById('f_website').value,
-      message:    document.getElementById('f_message').value,
-      reply_to:   document.getElementById('f_email').value,
-    };
-
-    try {
-      await emailjs.send('service_89loxo2', 'template_fzch057', params); // your notification template
-      await emailjs.send('service_89loxo2', 'template_2h6fh9k', params); // auto-reply template
-      showToast(true, "Message sent! We'll get back to you within 24 hours.");
-      form.reset();
-    } catch (err) {
-      console.error(err);
-      showToast(false, 'Something went wrong. Please try again.');
-    } finally {
-      submitBtn.disabled = false;
-      submitLabel.textContent = 'Send Request';
-    }
-  });
-
+});
